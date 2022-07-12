@@ -23,4 +23,9 @@ public class UserService implements UserDetailsService{
         return userDetailsPrincipal;
     }
 
+
+    public User addUser(User user) {
+        return userRepository.save(user);
+    }
+
 }

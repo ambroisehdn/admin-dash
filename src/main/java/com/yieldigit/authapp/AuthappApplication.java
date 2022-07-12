@@ -46,10 +46,13 @@ public class AuthappApplication extends WebSecurityConfigurerAdapter {
 	}
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-			http
-					.authorizeHttpRequests()
-					.antMatchers("/home").permitAll()
-					.antMatchers("/admin").hasRole("ADMIN")
-				.anyRequest().authenticated().and().formLogin();
+		http
+			.csrf().disable()
+			.authorizeHttpRequests()
+			.antMatchers("/home").permitAll()
+			.antMatchers("/addrole").permitAll()
+			.antMatchers("/adduser").permitAll()
+			.antMatchers("/admin").hasRole("ADMIN")
+			.anyRequest().authenticated().and().formLogin();
 	}
 }
