@@ -10,7 +10,7 @@ public class FrontController {
 
     @GetMapping("/")
     public String page() {
-        return "index";
+        return "pages/index";
     }
 
 }
