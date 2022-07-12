@@ -1,11 +1,15 @@
 package com.yieldigit.authapp.services.user;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.yieldigit.authapp.models.user.User;
+
 
 public class UserDetailsPrincipal implements UserDetails{
 
@@ -17,8 +21,10 @@ public class UserDetailsPrincipal implements UserDetails{
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // TODO Auto-generated method stub
-        return null;
+
+        List<GrantedAuthority> roles = new ArrayList<>();
+        roles.add(new SimpleGrantedAuthority("ROLE_"+user.getRole().getRolename()));
+        return roles;
     }
 
     @Override
