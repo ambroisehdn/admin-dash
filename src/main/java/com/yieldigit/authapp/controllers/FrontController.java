@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class FrontController {
     
 
-    @GetMapping("/")
-    public String page() {
-        return "pages/index";
+    @GetMapping(name = "Admin@Home",path = "/")
+    public String adminHome() {
+        return "pages/admin/home";
     }
 
 }
