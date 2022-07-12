@@ -1,4 +1,4 @@
-package com.yieldigit.authapp.controllers;
+package com.yieldigit.authapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/")
-public class HomeController {
+@RequestMapping("/api")
+public class RestFrontController {
     
 
     @Autowired
@@ -26,14 +26,15 @@ public class HomeController {
     @Autowired
     UserService userService;
 
-    @GetMapping(value = "home")
-    public String home() {
-        return "Hello World!";
+
+    @GetMapping(value = "")
+    public String defaultPage() {
+        return "Hello default page Rest !";
     }
 
-    @GetMapping(value = "admin")
+    @GetMapping(value = "home")
     public String admin() {
-        return "Hello Admin!";
+        return "Hello Admin Rest!";
     }
 
     @PostMapping(value = "addrole")

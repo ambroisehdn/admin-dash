@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import com.yieldigit.authapp.services.user.UserService;
 
 
@@ -32,7 +31,7 @@ public class AuthappApplication extends WebSecurityConfigurerAdapter {
 	UserService userService;
 
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+	protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(daoAuthenticationProvider());
 	}
 
@@ -41,18 +40,40 @@ public class AuthappApplication extends WebSecurityConfigurerAdapter {
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 		daoAuthenticationProvider.setPasswordEncoder(bcryptPasswordEncoder());
 		daoAuthenticationProvider.setUserDetailsService(this.userService);
-		
+
 		return daoAuthenticationProvider;
 	}
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.csrf().disable()
-			.authorizeHttpRequests()
-			.antMatchers("/home").permitAll()
-			.antMatchers("/addrole").permitAll()
-			.antMatchers("/adduser").permitAll()
-			.antMatchers("/admin").hasRole("ADMIN")
-			.anyRequest().authenticated().and().formLogin();
+				.authorizeHttpRequests()
+				// .antMatchers("/").permitAll()
+
+				// .anyRequest().permitAll();
+
+			// .antMatchers("/home").permitAll()
+			// .antMatchers("/addrole").permitAll()
+			// .antMatchers("/adduser").permitAll()
+				// .antMatchers("/admin/home").hasRole("ADMIN");
+				.anyRequest()
+				.authenticated()
+				.and()
+				.formLogin()
+				// .failureHandler(
+				// 		new AuthenticationFailureHandler() {
+						
+				
+				// 		@Override
+				// 		public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+				// 				AuthenticationException exception)
+				// 				throws IOException, ServletException {
+				// 				String redirectUrl = request.getContextPath() + "/login?error";
+				// 				response.sendRedirect(redirectUrl);							
+				// 		}	
+				// 	}
+				// )
+				;
 	}
 }
