@@ -1,4 +1,4 @@
-package com.yieldigit.authapp.controller;
+package com.yieldigit.authapp.controllers;
 
 
 import org.springframework.stereotype.Controller;
