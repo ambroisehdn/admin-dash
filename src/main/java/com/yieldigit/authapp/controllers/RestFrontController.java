@@ -1,5 +1,7 @@
 package com.yieldigit.authapp.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,16 +39,21 @@ public class RestFrontController {
         return "Hello Admin Rest!";
     }
 
-    @PostMapping(value = "addrole")
+    @PostMapping(value = "role")
     
     public Role addRole(@RequestBody Role role) {
         return roleRepository.save(role);
     }
 
-    @PostMapping(value = "adduser")
+    @PostMapping(value = "user")
     public User addUser(@RequestBody User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         return userService.addUser(user);
+    }
+
+    @GetMapping(value = "user")
+    public List<User> getUser() {
+        return userService.getUser();
     }
     
 }
