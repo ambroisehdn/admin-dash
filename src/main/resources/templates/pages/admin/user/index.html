@@ -11,65 +11,85 @@
         <div class="main-panel">
             <div class="content">
                 <div class="container-fluid">
-                    <h4 class="page-title">User Manager</h4>
+                    <h4 class="page-title">Gestion Utilisateurs</h4>
                     <div class="row">
                         <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <div class="card-title">User List</div>
+                                
+                                <div class="card-title">Liste des utilisateurs</div>
+                                <div class="btn btn-primary btn-sm mt-2" id="addUser">Ajouter <i class="la la-plus"></i></div>
                             </div>
                             <div class="card-body">
                                
                                 <div class="table-responsive">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered" id="userTable">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>Table heading</th>
-                                                <th>Table heading</th>
-                                                <th>Table heading</th>
-                                                <th>Table heading</th>
-                                                <th>Table heading</th>
-                                                <th>Table heading</th>
+                                                <th>ID</th>
+                                                <th>Username</th>
+                                                <th>Role</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">2</th>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">3</th>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                                <td>Table cell</td>
-                                            </tr>
+                                           
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                         </div>
-
-
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="userModal" tabindex="-1" role="dialog" data-backdrop="static"
+            aria-labelledby="userTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <strong class="modal-title text-uppercase"> UTILISATEUR </strong>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="userForm" class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" name="username" id="username">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="role_id">Role</label>
+                                <select name="role_id" id="role_id" class="form-control" th:each="role : ${roles}">
+                                    <option th:value="${role.id}" value="{{ $country }}" th:text="${role.rolename}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="password">Mot de password</label>
+                                <input type="password" class="form-control" name="password" id="password">
+                            </div>
+                        </div>
+        
+                        <div class="col-12">
+                            
+                            <input type="hidden" name="idUser" id="idUser" value="">
+                            <button type="submit" class="btn btn-primary btn-icon-split mb-2">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-arrow-right"></i>
+                                </span>
+                                <span class="text">Enrégistrer</span>
+                            </button>
+                        </div>
+                    </form>
+        
                 </div>
             </div>
         </div>

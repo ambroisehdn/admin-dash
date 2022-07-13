@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,5 +57,15 @@ public class RestFrontController {
     public List<User> getUser() {
         return userService.getUser();
     }
+
+    @GetMapping(value = "user/{id}")
+    public User getUserById(@PathVariable int id) {
+        return userService.getUserById(id);
+    }
     
+    @DeleteMapping(value = "user/{id}")
+    public void deleteUser(@PathVariable int id) {
+        userService.deleteUser(id);
+        
+    }
 }
