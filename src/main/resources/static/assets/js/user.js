@@ -31,44 +31,44 @@ $.getScript("/assets/js/plugin.js", function () {
             $('#userModal').modal('show')
         });
 
-    
-        $(document).on('submit', '#userForm', function (e) {
-             e.preventDefault();
-            var data = formToJson($("#userForm"));
-            
-            // if (data.indexOf('=&') > -1 || data.substr(data.length - 1) == '=') {
-            //     swal({
-            //         title: "Erreur !",
-            //         text: "Veuillez sélectionner les deux dates",
-            //         buttonsStyling: false,
-            //         confirmButtonClass: "btn btn-danger",
-            //         type: "error"
-            //     });
-            // } else {
-            //     ajaxRequest(data, 'POST', REQUEST_PATH , responsewithData)
-            // }
-            ajaxRequest(data, 'POST', REQUEST_PATH, function (response) {
-                $('#userModal').modal('hide')
-                $.notify({
-                	icon: 'la la-bell',
-                	title: 'Bootstrap notify',
-                	message: "L'utilisateur a été ajouté avec succès",
-                },{
-                	type: 'success',
-                	placement: {
-                		from: "top",
-                		align: "right"
-                	},
-                	time: 500,
-                });
-                userDataTable.ajax.reload()
-            })
 
+        $(document).on('submit', '#userForm', function (e) {
+            e.preventDefault();
+            var form_data = $(this).serialize();
+            if (form_data.indexOf('=&') > -1 || form_data.substr(form_data.length - 1) == '=') {
+                swal("Error", "Veuillez remplir tous les champs", "error");
+            } else {
+                var data = {
+                    "username": $('#username').val(),
+                    "password": $("#password").val(),
+                    "role": {
+                        "id": $('#role_id').val(),
+                    }
+                }
+                data = JSON.stringify(data)
+                ajaxRequest(data, 'POST', REQUEST_PATH, function (response) {
+                    $('#userModal').modal('hide')
+                    $.notify({
+                        icon: 'la la-bell',
+                        title: 'Bravo',
+                        message: "L'utilisateur a été ajouté avec succès",
+                    }, {
+                        type: 'success',
+                        placement: {
+                            from: "top",
+                            align: "right"
+                        },
+                        time: 500,
+                    });
+                    resetHtmlForm('#userForm')
+                    userDataTable.ajax.reload()
+                })
+            }
         });
 
         $(document).on("click", ".editUser", function (e) {
             e.preventDefault();
-            var id = getDataValue(this,"id")           
+            var id = getDataValue(this, "id")
             ajaxRequest('', 'GET', REQUEST_PATH + id, function (response) {
                 resetHtmlForm('#userForm')
                 data = response
@@ -79,8 +79,8 @@ $.getScript("/assets/js/plugin.js", function () {
                 changeModalAttribute('#userModal', 'userEditModal', '#userForm', 'userUpdateForm')
             })
         })
-
-        $(document).on("click", ".deleteUser", function (e) {  
+      
+        $(document).on("click", ".deleteUser", function (e) {
             e.preventDefault();
             $this = $(this)
             var id = getDataValue(this, "id")
@@ -101,10 +101,20 @@ $.getScript("/assets/js/plugin.js", function () {
                 })
                 .then((willDelete) => {
                     if (willDelete) {
-                        // ajaxRequest(data, methode, link, response)
-                        // $($this.parent().parent()).remove();
-                    console.log(id)
-
+                        ajaxRequest(null, "DELETE", REQUEST_PATH + id, null)
+                         $.notify({
+                             icon: 'la la-bell',
+                             title: 'Bravo',
+                             message: "L'utilisateur a été supprimé avec succès",
+                         }, {
+                             type: 'success',
+                             placement: {
+                                 from: "top",
+                                 align: "right"
+                             },
+                             time: 500,
+                         });
+                        $($this.parent().parent().parent()).remove();
                     } else {
                         swal("ACTION ANNULEE");
                     }
