@@ -1,8 +1,8 @@
 <header th:includes="header">
     <div class="main-header">
         <div class="logo-header">
-            <a href="index.html" class="logo">
-                Ready Dashboard
+            <a th:href="${(#mvc.url('FC#adminHome')).build()}" class="logo">
+                Admin Dashboard
             </a>
             <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
                 data-target="collapse" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">

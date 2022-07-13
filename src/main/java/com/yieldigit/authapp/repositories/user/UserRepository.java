@@ -8,4 +8,5 @@ import com.yieldigit.authapp.models.user.User;
 public interface UserRepository extends JpaRepository<User,Integer>{
     
     User findByUsername(String username);
+
 }
