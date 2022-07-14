@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.yieldigit.authapp.models.file.File;
 import com.yieldigit.authapp.models.user.Role;
@@ -27,6 +28,7 @@ import com.yieldigit.authapp.services.user.UserService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -43,7 +45,9 @@ public class RestFrontController {
     @Autowired
     UserService userService;
 
-    private final String UPLOAD_DIR = "./src/main/resources/storages/";
+    private final String UPLOAD_DIR = "./storages/";
+    // private final String UPLOAD_DIR = "./src/main/resources/storages/";
+
     @PostMapping(value = "role")
     public Role addRole(@RequestBody Role role) {
         return roleRepository.save(role);
@@ -101,9 +105,29 @@ public class RestFrontController {
     
     @GetMapping(value = "file")
     public List<File> getFile() {
-        return fileRepository.findAll();
-    }
+        List<File> files = fileRepository.findAll();
+        files.forEach(file -> {
 
+            file.setPath(ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path(UPLOAD_DIR)
+                    .path(file.getPath())
+                    .toUriString());
+            // try {
+            //     Path fileInStorage = Paths.get(UPLOAD_DIR).resolve(file.getPath());
+            //     Resource fileResource = new UrlResource(fileInStorage.toUri());
+            //     file.setFileResource(fileResource);
+            //     // file.setPath();
+            // }
+            // catch (MalformedURLException e) {
+            //     throw new RuntimeException("Error: " + e.getMessage());
+            // }
+            //   file.setFileResource(file.getPath());
+        });
+
+        return files;
+    }
+    
+    
     @GetMapping(value = "file/{id}")
     public File getFileById(@PathVariable int id) {
         return fileRepository.findById(id).get();
@@ -132,8 +156,6 @@ public class RestFrontController {
         
         // save the file on the local file system
         try {
-            // Path path = Paths.get(UPLOAD_DIR + fileName);
-            // Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
             Path targetLocation = uploadPath.resolve(newFileNameWithExtension);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {

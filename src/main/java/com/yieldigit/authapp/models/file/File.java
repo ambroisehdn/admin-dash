@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.springframework.core.io.Resource;
 
 @Entity
 @Table(name = "files")
@@ -17,6 +20,11 @@ public class File {
     private String name;
 
     private String path;
+
+    @Transient 
+    private Resource fileResource;
+
+
 
     public int getId() {
         return id;
@@ -40,5 +48,13 @@ public class File {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public void setFileResource(Resource fileResource) {
+        this.fileResource = fileResource;
+    }
+    
+    public Resource getFileResource() {
+        return this.fileResource;
     }
 }
