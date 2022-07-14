@@ -1,14 +1,20 @@
 package com.yieldigit.authapp.controllers;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yieldigit.authapp.models.file.File;
 import com.yieldigit.authapp.models.user.Role;
@@ -100,9 +106,17 @@ public class RestFrontController {
         return fileRepository.findById(id).get();
     }
 
-    @PostMapping(value = "file")
-    public File addFile(@RequestBody File file) {
-        return fileRepository.save(file);
+    @PostMapping(value = "file", consumes = "multipart/form-data")
+    public void addFile(@RequestParam MultipartFile file,@RequestParam String name) throws IOException {
+
+        Path uploadPath = Paths.get("storage/");
+        System.out.println(uploadPath);
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        File newFile = new File();
+        newFile.setName(name);
+        newFile.setPath(fileName);
+        fileRepository.save(newFile);
+        
     }
     
 }

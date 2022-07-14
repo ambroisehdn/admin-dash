@@ -37,14 +37,16 @@
     function ajaxUploadRequest(data, method, url, callback) {
         $.ajax({
             url: url,
-            dataType: 'JSON',
+            dataType: 'json',
             cache: false,
+            // contentType: "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW" ,
             contentType: false,
+            // mimeType: 'multipart/form-data', ;boundary=gc0p4Jq0M2Yt08jU534c0p
             processData: false,
-            data: data, error: callback,
+            data: data,
+            error: callback,
             success: callback,
             type: method,
-            success: callback
 
         });
     }

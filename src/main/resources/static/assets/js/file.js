@@ -34,10 +34,8 @@ $.getScript("/assets/js/plugin.js", function () {
             if ($('#name').val() == '') {
                 swal("Error", "Veuillez remplir tous les champs", "error");
             } else {
-                var file = $('#file').prop('files')[0];
-                var data = new FormData($("#fileForm")[0]);
-                data.append('file', file);
-                ajaxUploadRequest(data, 'POST', REQUEST_FILE_PATH, function (response) {
+                
+                ajaxUploadRequest(new FormData(this), 'POST', REQUEST_FILE_PATH, function (response) {
                     $('#fileModal').modal('hide')
                     $.notify({
                         icon: 'la la-bell',
