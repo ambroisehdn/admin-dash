@@ -1,8 +1,10 @@
 package com.yieldigit.authapp.controllers;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,7 @@ public class RestFrontController {
     @Autowired
     UserService userService;
 
+    private final String UPLOAD_DIR = "./src/main/resources/storages/";
     @PostMapping(value = "role")
     public Role addRole(@RequestBody Role role) {
         return roleRepository.save(role);
@@ -107,16 +110,54 @@ public class RestFrontController {
     }
 
     @PostMapping(value = "file", consumes = "multipart/form-data")
-    public void addFile(@RequestParam MultipartFile file,@RequestParam String name) throws IOException {
+    public File addFile(@RequestParam MultipartFile file,@RequestParam String name) throws IOException,Exception {
 
-        Path uploadPath = Paths.get("storage/");
-        System.out.println(uploadPath);
+        Path uploadPath = Paths.get(UPLOAD_DIR);
+        // Create the directory if it does not exist
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        //check if the file is empty
+        if (file.isEmpty()) {
+            throw new Exception("File is empty");
+        }
+
+
+        // normalize the file path
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String newFileName = java.util.UUID.randomUUID().toString();
+        String extension = fileName.substring(fileName.lastIndexOf("."));
+        String newFileNameWithExtension = newFileName + extension;
+        
+        // save the file on the local file system
+        try {
+            // Path path = Paths.get(UPLOAD_DIR + fileName);
+            // Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            Path targetLocation = uploadPath.resolve(newFileNameWithExtension);
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         File newFile = new File();
         newFile.setName(name);
-        newFile.setPath(fileName);
-        fileRepository.save(newFile);
-        
+        newFile.setPath(newFileNameWithExtension);
+        return fileRepository.save(newFile);
+         
+    }
+
+    @DeleteMapping(value = "file/{id}")
+    public void deleteFile(@PathVariable int id) {
+        File fileToDelete = fileRepository.findById(id).get();
+        Path path = Paths.get(UPLOAD_DIR + fileToDelete.getPath());
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        fileRepository.deleteById(id);
+
     }
     
 }

@@ -17,7 +17,7 @@ $.getScript("/assets/js/plugin.js", function () {
                 },
                 {
                     "render": function (data, type, row) {
-                        return '<div class="text-center"> <a href="#' + row.id + '" data-id="' + row.id + '" class="btn btn-info btn-sm ml-2 editRole"> <span> <i class="la la-edit"></i></span></a>  <a data-id="' + row.id + '" href="#' + row.id + '" class="btn btn-danger btn-sm ml-2 deleteRole"> <span> <i class="la la-trash"></i> </span> </a>   </div>';
+                        return '<div class="text-center"> <a href="#' + row.id + '" data-id="' + row.id + '" class="btn btn-info btn-sm ml-2 editFile"> <span> <i class="la la-edit"></i></span></a>  <a data-id="' + row.id + '" href="#' + row.id + '" class="btn btn-danger btn-sm ml-2 deleteFile"> <span> <i class="la la-trash"></i> </span> </a>   </div>';
                     }
                 },
             ]
