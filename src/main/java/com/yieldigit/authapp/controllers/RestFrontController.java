@@ -30,21 +30,32 @@ public class RestFrontController {
     @Autowired
     UserService userService;
 
-
-    @GetMapping(value = "")
-    public String defaultPage() {
-        return "Hello default page Rest !";
-    }
-
-    @GetMapping(value = "home")
-    public String admin() {
-        return "Hello Admin Rest!";
-    }
-
     @PostMapping(value = "role")
-    
     public Role addRole(@RequestBody Role role) {
         return roleRepository.save(role);
+    }
+
+    @GetMapping(value = "role")
+    public List<Role> getRole() {
+        return roleRepository.findAll();
+    }
+
+    @GetMapping(value = "role/{id}")
+    public Role getRoleById(@PathVariable int id) {
+        return roleRepository.findById(id).get();
+    }
+
+    @DeleteMapping(value = "role/{id}")
+    public void deleteRole(@PathVariable int id) {
+        roleRepository.deleteById(id);
+
+    }
+
+    @PostMapping(value = "role/{id}")
+    public Role updateUser(@RequestBody Role role, @PathVariable int id) {
+        Role roleToUpdate = roleRepository.findById(id).get();
+        roleToUpdate.setRolename(role.getRolename());
+        return roleRepository.save(roleToUpdate);
     }
 
     @PostMapping(value = "user")

@@ -1,10 +1,10 @@
 $.getScript("/assets/js/plugin.js", function () {
 
     $(document).ready(function () {
-        REQUEST_USER_PATH = "/api/user/"
+        REQUEST_ROLE_PATH = "/api/role/"
 
-        var userDataTable = $('#userTable').DataTable({
-            "sAjaxSource": "/api/user",
+        var roleDataTable = $('#roleTable').DataTable({
+            "sAjaxSource": "/api/role",
             "sAjaxDataProp": "",
             "order": [
                 [0, "asc"]
@@ -13,45 +13,38 @@ $.getScript("/assets/js/plugin.js", function () {
                     "mData": "id"
                 },
                 {
-                    "mData": "username"
-                },
-                {
-                    "mData": "role.rolename"
+                    "mData": "rolename"
                 },
                 {
                     "render": function (data, type, row) {
-                        return '<div class="text-center"> <a href="#' + row.id + '" data-id="' + row.id + '" class="btn btn-info btn-sm ml-2 editUser"> <span> <i class="la la-edit"></i></span></a>  <a data-id="' + row.id + '" href="#' + row.id + '" class="btn btn-danger btn-sm ml-2 deleteUser"> <span> <i class="la la-trash"></i> </span> </a>   </div>';
+                        return '<div class="text-center"> <a href="#' + row.id + '" data-id="' + row.id + '" class="btn btn-info btn-sm ml-2 editRole"> <span> <i class="la la-edit"></i></span></a>  <a data-id="' + row.id + '" href="#' + row.id + '" class="btn btn-danger btn-sm ml-2 deleteRole"> <span> <i class="la la-trash"></i> </span> </a>   </div>';
                     }
                 },
             ]
         })
 
-        $(document).on("click", "#addUser", function (e) {
+        $(document).on("click", "#addRole", function (e) {
             e.preventDefault()
-            $('#userModal').modal('show')
+            $('#roleModal').modal('show')
         });
 
 
-        $(document).on('submit', '#userForm', function (e) {
+        $(document).on('submit', '#roleForm', function (e) {
             e.preventDefault();
             var form_data = $(this).serialize();
             if (form_data.indexOf('=&') > -1 || form_data.substr(form_data.length - 1) == '=') {
                 swal("Error", "Veuillez remplir tous les champs", "error");
             } else {
                 var data = {
-                    "username": $('#username').val(),
-                    "password": $("#password").val(),
-                    "role": {
-                        "id": $('#role_id').val(),
-                    }
+                    "rolename": $('#rolename').val(),
                 }
                 data = JSON.stringify(data)
-                ajaxRequest(data, 'POST', REQUEST_USER_PATH, function (response) {
-                    $('#userModal').modal('hide')
+                ajaxRequest(data, 'POST', REQUEST_ROLE_PATH, function (response) {
+                    $('#roleModal').modal('hide')
                     $.notify({
                         icon: 'la la-bell',
                         title: 'Bravo',
-                        message: "L'utilisateur a été ajouté avec succès",
+                        message: "Le role a été ajouté avec succès",
                     }, {
                         type: 'success',
                         placement: {
@@ -60,48 +53,42 @@ $.getScript("/assets/js/plugin.js", function () {
                         },
                         time: 500,
                     });
-                    resetHtmlForm('#userForm')
-                    userDataTable.ajax.reload()
+                    resetHtmlForm('#roleForm')
+                    roleDataTable.ajax.reload()
                 })
             }
         });
 
-        $(document).on("click", ".editUser", function (e) {
+        $(document).on("click", ".editRole", function (e) {
             e.preventDefault();
             var id = getDataValue(this, "id")
-            ajaxRequest('', 'GET', REQUEST_USER_PATH + id, function (response) {
-                resetHtmlForm('#userForm')
+            ajaxRequest('', 'GET', REQUEST_ROLE_PATH + id, function (response) {
+                resetHtmlForm('#roleForm')
                 data = response
-                $("#username").val(data.username),
-                    $("#role_id").val(data.role.id),
-                    $("#idUser").val(data.id)
-                $('#userModal').modal('show')
-                changeModalAttribute('#userModal', 'userEditModal', '#userForm', 'userUpdateForm')
+                $("#rolename").val(data.rolename),
+                    $("#idRole").val(data.id)
+                $('#roleModal').modal('show')
+                changeModalAttribute('#roleModal', 'roleEditModal', '#roleForm', 'roleUpdateForm')
             })
         })
 
-        $(document).on('submit', '#userUpdateForm', function (e) {
+        $(document).on('submit', '#roleUpdateForm', function (e) {
             e.preventDefault();
             var form_data = $(this).serialize();
-            var id = getTagValue('#idUser')
+            var id = getTagValue('#idRole')
             if (form_data.indexOf('=&') > -1 || form_data.substr(form_data.length - 1) == '=') {
                 swal("Error", "Veuillez remplir tous les champs", "error");
             } else {
                 var data = {
-                    "username": $('#username').val(),
-                    "password": $("#password").val(),
-                    "role": {
-                        "id": $('#role_id').val(),
-                    }
+                    "rolename": $('#rolename').val(),
                 }
                 data = JSON.stringify(data)
-                
-                ajaxRequest(data, 'POST', REQUEST_USER_PATH+id, function (response) {
-                    $('#userEditModal').modal('hide')
+                ajaxRequest(data, 'POST', REQUEST_ROLE_PATH+id, function (response) {
+                    $('#roleEditModal').modal('hide')
                     $.notify({
                         icon: 'la la-bell',
                         title: 'Bravo',
-                        message: "L'utilisateur a été modifié avec succès",
+                        message: "Le role a été modifié avec succès",
                     }, {
                         type: 'success',
                         placement: {
@@ -110,14 +97,14 @@ $.getScript("/assets/js/plugin.js", function () {
                         },
                         time: 500,
                     });
-                    resetHtmlForm('#userUpdateForm')
-                    changeModalAttribute('#userEditModal', 'userModal', '#userUpdateForm', 'userForm')
-                    userDataTable.ajax.reload()
+                    resetHtmlForm('#roleUpdateForm')
+                    changeModalAttribute('#roleEditModal', 'roleModal', '#roleUpdateForm', 'roleForm')
+                    roleDataTable.ajax.reload()
                 })
             }
         });
 
-        $(document).on("click", ".deleteUser", function (e) {
+        $(document).on("click", ".deleteRole", function (e) {
             e.preventDefault();
             $this = $(this)
             var id = getDataValue(this, "id")
@@ -138,11 +125,11 @@ $.getScript("/assets/js/plugin.js", function () {
                 })
                 .then((willDelete) => {
                     if (willDelete) {
-                        ajaxRequest(null, "DELETE", REQUEST_USER_PATH + id, null)
+                        ajaxRequest(null, "DELETE", REQUEST_ROLE_PATH + id, null)
                         $.notify({
                             icon: 'la la-bell',
                             title: 'Bravo',
-                            message: "L'utilisateur a été supprimé avec succès",
+                            message: "Le role a été supprimé avec succès",
                         }, {
                             type: 'success',
                             placement: {

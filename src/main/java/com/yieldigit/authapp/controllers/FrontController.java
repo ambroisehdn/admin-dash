@@ -47,4 +47,11 @@ public class FrontController {
         return "pages/admin/user/index";
     }
 
+    @GetMapping("/role")
+    public String roleManager(Model model, HttpServletRequest request) {
+        String user = this.logedUserName(request);
+        model.addAttribute("username", user);
+        return "pages/admin/role/index";
+    }
+
 }
