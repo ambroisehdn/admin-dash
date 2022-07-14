@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,6 +51,13 @@ public class FrontController {
         String user = this.logedUserName(request);
         model.addAttribute("username", user);
         return "pages/admin/role/index";
+    }
+
+    @GetMapping("/file")
+    public String fileManager(Model model, HttpServletRequest request) {
+        String user = this.logedUserName(request);
+        model.addAttribute("username", user);
+        return "pages/admin/file/index";
     }
 
 }

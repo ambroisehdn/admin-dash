@@ -1,6 +1,5 @@
-package com.yieldigit.authapp.models.user;
+package com.yieldigit.authapp.models.file;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,14 +7,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "roles")
-public class Role {
-    
+@Table(name = "files")
+public class File {
+
     @Id
-    @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String rolename;
+
+    private String name;
+
+    private String path;
 
     public int getId() {
         return id;
@@ -25,12 +26,19 @@ public class Role {
         this.id = id;
     }
 
-    public String getRolename() {
-        return rolename;
+    public String getName() {
+        return name;
     }
 
-    public void setRolename(String rolename) {
-        this.rolename = rolename;
+    public void setName(String name) {
+        this.name = name;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 }
