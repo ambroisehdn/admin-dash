@@ -79,7 +79,43 @@ $.getScript("/assets/js/plugin.js", function () {
                 changeModalAttribute('#userModal', 'userEditModal', '#userForm', 'userUpdateForm')
             })
         })
-      
+
+        $(document).on('submit', '#userUpdateForm', function (e) {
+            e.preventDefault();
+            var form_data = $(this).serialize();
+            var id = getTagValue('#idUser')
+            if (form_data.indexOf('=&') > -1 || form_data.substr(form_data.length - 1) == '=') {
+                swal("Error", "Veuillez remplir tous les champs", "error");
+            } else {
+                var data = {
+                    "username": $('#username').val(),
+                    "password": $("#password").val(),
+                    "role": {
+                        "id": $('#role_id').val(),
+                    }
+                }
+                data = JSON.stringify(data)
+                ajaxRequest(data, 'POST', REQUEST_PATH+id, function (response) {
+                    $('#userEditModal').modal('hide')
+                    $.notify({
+                        icon: 'la la-bell',
+                        title: 'Bravo',
+                        message: "L'utilisateur a été modifié avec succès",
+                    }, {
+                        type: 'success',
+                        placement: {
+                            from: "top",
+                            align: "right"
+                        },
+                        time: 500,
+                    });
+                    resetHtmlForm('#userUpdateForm')
+                    changeModalAttribute('#userEditModal', 'userModal', '#userUpdateForm', 'userForm')
+                    userDataTable.ajax.reload()
+                })
+            }
+        });
+
         $(document).on("click", ".deleteUser", function (e) {
             e.preventDefault();
             $this = $(this)
@@ -102,18 +138,18 @@ $.getScript("/assets/js/plugin.js", function () {
                 .then((willDelete) => {
                     if (willDelete) {
                         ajaxRequest(null, "DELETE", REQUEST_PATH + id, null)
-                         $.notify({
-                             icon: 'la la-bell',
-                             title: 'Bravo',
-                             message: "L'utilisateur a été supprimé avec succès",
-                         }, {
-                             type: 'success',
-                             placement: {
-                                 from: "top",
-                                 align: "right"
-                             },
-                             time: 500,
-                         });
+                        $.notify({
+                            icon: 'la la-bell',
+                            title: 'Bravo',
+                            message: "L'utilisateur a été supprimé avec succès",
+                        }, {
+                            type: 'success',
+                            placement: {
+                                from: "top",
+                                align: "right"
+                            },
+                            time: 500,
+                        });
                         $($this.parent().parent().parent()).remove();
                     } else {
                         swal("ACTION ANNULEE");

@@ -48,4 +48,13 @@ public class UserService implements UserDetailsService{
         userRepository.deleteById(id);
     }
 
+    public User updateUser(User user, int id) {
+        User userToUpdate = userRepository.findById(id).get();
+
+        userToUpdate.setUsername(user.getUsername());
+        userToUpdate.setPassword(user.getPassword());
+        userToUpdate.setRole(userToUpdate.getRole());
+        return userRepository.save(userToUpdate);
+    }
+
 }

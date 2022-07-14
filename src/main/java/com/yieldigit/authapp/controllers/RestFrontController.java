@@ -66,6 +66,12 @@ public class RestFrontController {
     @DeleteMapping(value = "user/{id}")
     public void deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
-        
+
     }
+    
+    @PostMapping(value="user/{id}")
+    public User updateUser(@RequestBody User user, @PathVariable int id) {        
+        return userService.updateUser(user, id);
+    }
+    
 }
