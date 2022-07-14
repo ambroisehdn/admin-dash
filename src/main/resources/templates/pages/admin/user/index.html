@@ -67,6 +67,7 @@
                             <div class="form-group col-md-12">
                                 <label for="role_id">Role</label>
                                 <select name="role_id" id="role_id" class="form-control" >
+                                    <option value="">Choisir un role</option>
                                     <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.rolename}"></option>
                                 </select>
                             </div>

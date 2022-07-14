@@ -71,6 +71,11 @@ $.getScript("/assets/js/plugin.js", function () {
                 changeModalAttribute('#roleModal', 'roleEditModal', '#roleForm', 'roleUpdateForm')
             })
         })
+        
+        //trigger when modal dismiss button is clicked
+        $('#roleModal').on('hidden.bs.modal', function () {
+            changeModalAttribute('#roleEditModal', 'roleModal', '#roleUpdateForm', 'roleForm')
+        });
 
         $(document).on('submit', '#roleUpdateForm', function (e) {
             e.preventDefault();

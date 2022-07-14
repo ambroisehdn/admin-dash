@@ -66,6 +66,11 @@ $.getScript("/assets/js/plugin.js", function () {
             }
         });
 
+        //trigger when modal dismiss button is clicked
+        $('#userModal').on('hidden.bs.modal', function () {
+            changeModalAttribute('#userEditModal', 'userModal', '#userUpdateForm', 'userForm')
+        });
+
         $(document).on("click", ".editUser", function (e) {
             e.preventDefault();
             var id = getDataValue(this, "id")
@@ -98,6 +103,7 @@ $.getScript("/assets/js/plugin.js", function () {
                 
                 ajaxRequest(data, 'POST', REQUEST_USER_PATH+id, function (response) {
                     $('#userEditModal').modal('hide')
+                    changeModalAttribute('#userEditModal', 'userModal', '#userUpdateForm', 'userForm')
                     $.notify({
                         icon: 'la la-bell',
                         title: 'Bravo',
@@ -111,7 +117,6 @@ $.getScript("/assets/js/plugin.js", function () {
                         time: 500,
                     });
                     resetHtmlForm('#userUpdateForm')
-                    changeModalAttribute('#userEditModal', 'userModal', '#userUpdateForm', 'userForm')
                     userDataTable.ajax.reload()
                 })
             }
