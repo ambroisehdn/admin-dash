@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yieldigit.authapp.models.file.File;
 import com.yieldigit.authapp.models.user.Role;
 import com.yieldigit.authapp.models.user.User;
+import com.yieldigit.authapp.repositories.file.FileRepository;
 import com.yieldigit.authapp.repositories.user.RoleRepository;
 import com.yieldigit.authapp.services.user.UserService;
 
@@ -26,6 +28,9 @@ public class RestFrontController {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    FileRepository fileRepository;
 
     @Autowired
     UserService userService;
@@ -81,8 +86,23 @@ public class RestFrontController {
     }
     
     @PostMapping(value="user/{id}")
-    public User updateUser(@RequestBody User user, @PathVariable int id) {        
+    public User updateUser(@RequestBody User user, @PathVariable int id) {
         return userService.updateUser(user, id);
+    }
+    
+    @GetMapping(value = "file")
+    public List<File> getFile() {
+        return fileRepository.findAll();
+    }
+
+    @GetMapping(value = "file/{id}")
+    public File getFileById(@PathVariable int id) {
+        return fileRepository.findById(id).get();
+    }
+
+    @PostMapping(value = "file")
+    public File addFile(@RequestBody File file) {
+        return fileRepository.save(file);
     }
     
 }
